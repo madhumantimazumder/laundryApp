@@ -26,13 +26,49 @@ public class ChatController {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_XML)
     public String chatbot(MultivaluedMap<String,String> request) {
-	    String incoming_message =request.get("Body").get(0).toString();
-	    System.out.println("request "+incoming_message);
-		//request=request.split("&")[4];
-		//String incoming_message=request.split("=")[1];
-		Body body = new Body
+        String messageToSpend  = request.get("Body").get(0).toString().toLowerCase();
+        Body body;
+        if ("hello".equals(messageToSpend))
+        {
+            body = new Body
+                    .Builder("Say \"Book\" to book a slot\nSay \"Cancel\" to cancel your booked slot\n"
+                    +"Say \"View\" to view your details")
+                    .build();
+
+        }
+        else if("book".equals(messageToSpend) )
+        {
+            body = new Body
+                    .Builder("Available slots are:\n")
+                    .build();
+        }
+        else if("view".equals(messageToSpend) )
+        {
+            body = new Body
+                    .Builder("Your details are given below:\n")
+                    .build();
+        }
+        else if("cancel".equals(messageToSpend) )
+        {
+            body = new Body
+                    .Builder("Your slot booking is cancelled.")
+                    .build();
+        }
+        else if("exit".equals(messageToSpend) )
+        {
+            body = new Body
+                    .Builder("Thanks you!\nSay \"hello\" to start again.")
+                    .build();
+        }
+        else
+        {
+            body = new Body
+                    .Builder("Say \"Hello\" to start again.")
+                    .build();
+        }
+		/*Body body = new Body
                 .Builder(incoming_message)
-                .build();
+                .build();*/
         Message sms = new Message
                 .Builder()
                 .body(body)
