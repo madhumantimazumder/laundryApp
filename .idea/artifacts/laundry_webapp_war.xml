@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="laundry-webapp:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>laundry-webapp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="laundry app.war">
+      <element id="artifact" artifact-name="laundry-webapp:war exploded" />
+    </root>
+  </artifact>
+</component>
