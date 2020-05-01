@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.iiitb.laundry.beans.LaundryBooking;
 import com.iiitb.laundry.beans.LaundrySlot;
 import com.iiitb.laundry.beans.Student;
 
@@ -19,7 +20,8 @@ public class DBUtils {
         try {
             Configuration configuration = new Configuration();
             
-			configuration.addAnnotatedClass(Student.class).addAnnotatedClass(LaundrySlot.class);
+			configuration.addAnnotatedClass(Student.class).addAnnotatedClass(LaundrySlot.class)
+					.addAnnotatedClass(LaundryBooking.class);
             
             sessionFactory = configuration.buildSessionFactory();
         }

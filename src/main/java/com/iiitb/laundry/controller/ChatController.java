@@ -1,6 +1,10 @@
 package com.iiitb.laundry.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -28,6 +32,7 @@ public class ChatController {
 		DBUtils.getSession();
 		LocalTime time=LocalTime.now();
 		LocalTime dbTime=LocalTime.parse("02:44");
+		LocalDate date=LocalDate.now();
 		System.out.println(time.toString()+" "+dbTime.toString());
 		System.out.println(time.compareTo(dbTime));
         return "working...";
@@ -39,7 +44,7 @@ public class ChatController {
     @Produces(MediaType.APPLICATION_XML)
     public String chatbot(MultivaluedMap<String,String> request) {
         String receivedMsg  = request.get("Body").get(0).toString().toLowerCase();
-        String mobileNo="9038178722";//update this from received msg
+        String mobileNo=request.get("from").get(0).toString().toLowerCase();
         Body body=null;
         String reply=null;
         if ("hello".equalsIgnoreCase(receivedMsg))

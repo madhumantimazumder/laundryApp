@@ -8,7 +8,7 @@
   <name>laundry-webapp Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <build>
-    <finalName>laundry app</finalName>
+    <finalName>laundryapp</finalName>
      <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
