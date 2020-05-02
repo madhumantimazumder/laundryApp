@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="laundry app.war">
+    <root id="archive" name="laundryapp.war">
       <element id="artifact" artifact-name="laundry-webapp:war exploded" />
     </root>
   </artifact>

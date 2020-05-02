@@ -1,0 +1,222 @@
+/* Made with love by Mutiullah Samim*/
+
+html,body{
+height: 100%;
+}
+body.login-background{
+background-image: url('../images/img.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+}
+.login-error,.dept-error{
+	display:none;
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.course-error{
+	display:none;
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.login-error span,.course-error span,.dept-error span{
+	margin-right: 12px;
+}
+.container{
+align-content: center;
+}
+
+.container.login-container{
+	height:100%;
+}
+
+.card{
+height: 320px;
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color: rgba(0,0,0,0.5) !important;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #328fa8;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login_btn{
+color: black;
+background-color: #328fa8;
+width: 100px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+.navbar-dark .user,.navbar-dark .logout{
+	color: #fff;	
+}
+.navbar-dark .logout{
+	cursor : pointer;
+}
+.course-list label{
+	text-transform : capitalize;
+}
+.course-list div{
+	margin-top: 10px;
+    padding-left: 0;
+}
+.course-form{
+	box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, .125);
+    padding: 30px;
+    background-color: #E5FFCC;
+}
+.error-field{
+	display:none;
+	color: red;
+    font-size: 13px;
+    padding-top: 3px;
+}
+
+/*Modal*/
+.modal-confirm {		
+		color: #434e65;
+		width: 525px;
+}
+.modal-confirm .modal-content {
+	padding: 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: none;
+}
+.modal-confirm .modal-header {
+	background: #47c9a2;
+	border-bottom: none;   
+       position: relative;
+	text-align: center;
+	margin: -20px -20px 0;
+	border-radius: 5px 5px 0 0;
+	padding: 35px;
+}
+.modal-confirm h4 {
+	text-align: center;
+	font-size: 36px;
+	margin: 10px 0;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+	min-height: 40px;
+	border-radius: 3px; 
+}
+.modal-confirm .close {
+       position: absolute;
+	top: 15px;
+	right: 15px;
+	color: #fff;
+	text-shadow: none;
+	opacity: 0.5;
+}
+.modal-confirm .close:hover {
+	opacity: 0.8;
+}
+.modal-confirm .icon-box {
+	color: #fff;		
+	width: 95px;
+	height: 95px;
+	display: inline-block;
+	border-radius: 50%;
+	z-index: 9;
+	border: 5px solid #fff;
+	padding: 15px;
+	text-align: center;
+}
+.modal-confirm .icon-box i {
+	font-size: 64px;
+	margin: -4px 0 0 -4px;
+}
+.modal-confirm.modal-dialog {
+	margin-top: 80px;
+}
+   .modal-confirm .btn {
+       color: #fff;
+       border-radius: 4px;
+	background: #eeb711;
+	text-decoration: none;
+	transition: all 0.4s;
+       line-height: normal;
+	border-radius: 30px;
+	margin-top: 10px;
+	padding: 6px 20px;
+       border: none;
+   }
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+	background: #eda645;
+	outline: none;
+}
+.modal-confirm .btn span {
+	margin: 1px 3px 0;
+	float: left;
+}
+.modal-confirm .btn i {
+	margin-left: 1px;
+	font-size: 20px;
+	float: right;
+}
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+/*Modal*/

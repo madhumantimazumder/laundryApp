@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
 
-import iiitb.ss.admin.service.impl.LoginServiceImpl;
+import com.iiitb.laundry.service.LoginService;
 
 
 @Path("/api/login")
@@ -25,14 +25,11 @@ public class LoginController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String addStudentPost(String json) {
-        JSONObject jo = new JSONObject(); 
-        LoginServiceImpl limpl=new LoginServiceImpl();
+        JSONObject jo = new JSONObject();
+        LoginService limpl=new LoginService();
         String username = limpl.getAdmin(json);
         if(username==null) {
         	jo.put("status", 201);
-        }
-        else if(username == "dept") {
-        	jo.put("status", 202);
         }
         else {
         	jo.put("status", 200);

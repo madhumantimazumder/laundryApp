@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+// mysqldump -u root -p --databases IIITB_Laundry > dump.sql
 @Entity
 public class Student {
 	

@@ -3,6 +3,7 @@ package com.iiitb.laundry.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.iiitb.laundry.beans.Admin;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +22,7 @@ public class DBUtils {
             Configuration configuration = new Configuration();
             
 			configuration.addAnnotatedClass(Student.class).addAnnotatedClass(LaundrySlot.class)
-					.addAnnotatedClass(LaundryBooking.class);
+					.addAnnotatedClass(LaundryBooking.class).addAnnotatedClass(Admin.class);
             
             sessionFactory = configuration.buildSessionFactory();
         }

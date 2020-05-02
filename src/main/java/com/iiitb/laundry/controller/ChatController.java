@@ -44,7 +44,7 @@ public class ChatController {
     @Produces(MediaType.APPLICATION_XML)
     public String chatbot(MultivaluedMap<String,String> request) {
         String receivedMsg  = request.get("Body").get(0).toString().toLowerCase();
-        String mobileNo=request.get("from").get(0).toString().toLowerCase();
+        String mobileNo=request.get("From").get(0).toString().toLowerCase();
         Body body=null;
         String reply=null;
         if ("hello".equalsIgnoreCase(receivedMsg))
