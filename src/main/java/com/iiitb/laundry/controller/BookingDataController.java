@@ -15,11 +15,16 @@ import org.json.simple.parser.JSONParser;
 import java.lang.reflect.Array;
 import java.util.List;
 
-@Path("/api")
+@Path("/api/bookings")
 public class BookingDataController {
+    @GET  @Path("/")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getIt() {
+        return "working...";
+    }
 
     @POST
-    @Path("/getData")
+    @Path("/getdata")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String getBookingData(String dateJson) throws Exception {

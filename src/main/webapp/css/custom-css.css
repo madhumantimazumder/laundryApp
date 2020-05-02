@@ -219,4 +219,11 @@ margin-left: 4px;
 	display: inline-block;
 	margin: 100px auto;
 }
+.date-container{
+	letter-spacing: 1;
+	font-size: 15px;
+}
+#date-btn,#export-btn{
+	min-width: 96px;
+}
 /*Modal*/
