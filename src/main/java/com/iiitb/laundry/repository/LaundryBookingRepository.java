@@ -26,6 +26,7 @@ public class LaundryBookingRepository {
         session.close();
 		return list;
 	}
+	
 	public List<LaundryBooking> fetchBookedSlots(String startbookingDate,String endbookingDate) throws Exception{
 		Session session = DBUtils.getSession();
 		Transaction transaction = session.beginTransaction();
@@ -40,5 +41,22 @@ public class LaundryBookingRepository {
 		transaction.commit();
 		session.close();
 		return list;
+	}
+	
+	public void saveLaundryBooking(LaundryBooking laundryBooking) throws Exception {
+		Session session = DBUtils.getSession();
+		Transaction transaction = session.beginTransaction();
+		
+		String hql = "FROM LaundryBooking WHERE  slot = : laundry_slot and bookingDate = : booking_date";
+        Query query = session.createQuery(hql);
+        query.setParameter("laundry_slot", laundryBooking.getSlot());
+        query.setParameter("booking_date", laundryBooking.getBookingDate());
+        List<LaundryBooking> list= (List<LaundryBooking>) query.getResultList();
+        if(list.size()>=laundryBooking.getSlot().getNoOfMachines())
+        	throw new Exception();
+        
+		session.save(laundryBooking);
+		transaction.commit();
+        session.close();
 	}
 }

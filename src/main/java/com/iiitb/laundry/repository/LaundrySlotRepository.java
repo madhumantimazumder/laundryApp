@@ -24,5 +24,18 @@ public class LaundrySlotRepository {
         session.close();
         return slots;
 	}
+	
+	public LaundrySlot findSlotBySlotNo(int slotNo)throws Exception {
+		Session session = DBUtils.getSession();
+		Transaction transaction = session.beginTransaction();
+        
+        String hql = "FROM LaundrySlot WHERE slotId  = : slot_id";
+        Query query = session.createQuery(hql);
+        query.setParameter("slot_id", slotNo);
+        LaundrySlot slot=  (LaundrySlot) query.getSingleResult();
+        transaction.commit();
+        session.close();
+        return slot;
+	}
 
 }

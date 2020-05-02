@@ -64,18 +64,27 @@ public class ChatController {
         	String availableSlots;
 			try {
 				availableSlots = new BookingService().fetchAvailableSlot(Long.parseLong(mobileNo));
-				reply=availableSlots+"\n"+MessageConstants.AVAILABLE_SLOTS_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+				reply = availableSlots.isBlank() ? MessageConstants.NO_SLOTS_AVAILABLE_MSG + MessageConstants.END_OF_MSG
+						: availableSlots + "\n" + MessageConstants.AVAILABLE_SLOTS_TAIL_MSG + "\n\n"
+								+ MessageConstants.END_OF_MSG;
 	            body = new Body.Builder(reply).build();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
-        else if("view".equals(receivedMsg) )
+        else if(receivedMsg.startsWith("s"))//slot no for booking will come as s1,s2 etc
         {
-            body = new Body
-                    .Builder("Your details are given below:\n")
-                    .build();
+        	try {
+				int slotNo=Integer.parseInt(receivedMsg.substring(1));
+				new BookingService().bookSlot(slotNo, Long.parseLong(mobileNo));
+				reply=MessageConstants.ACK_FOR_CONFIRMED_BOOKING_MSG+receivedMsg+"\n\n"+MessageConstants.END_OF_MSG;
+			} catch (NumberFormatException e) {
+				reply=MessageConstants.NACK_FOR_WRONG_BOOKING_INPUT_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+			} catch(Exception e) { //can implement a custom exception if time permits
+				reply=MessageConstants.NACK_FOR_ALREADY_BOOKED_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+			}
+        	body = new Body.Builder(reply).build();
         }
         else if("cancel".equals(receivedMsg) )
         {

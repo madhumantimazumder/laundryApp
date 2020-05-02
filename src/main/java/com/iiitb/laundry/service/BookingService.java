@@ -1,5 +1,6 @@
 package com.iiitb.laundry.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,21 +15,37 @@ import com.iiitb.laundry.beans.Student;
 import com.iiitb.laundry.repository.LaundryBookingRepository;
 import com.iiitb.laundry.repository.LaundrySlotRepository;
 import com.iiitb.laundry.repository.StudentRepository;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
+import com.iiitb.laundry.utils.MessageConstants;
 
 public class BookingService {
 	
 	LaundrySlotRepository laundrySlotRepository=new LaundrySlotRepository();
 	StudentRepository studentRepository=new StudentRepository();
 	LaundryBookingRepository laundryBookingRepository=new LaundryBookingRepository();
-	private static final LocalTime END_TIME_FOR_TODAY_BOOKING=LocalTime.parse("19:40");
+	private static final LocalTime END_TIME_FOR_TODAY_BOOKING=LocalTime.parse("18:59");
 	private static final LocalTime END_OF_DAY_TIME=LocalTime.parse("00:00");
 	
-	private void filterBookedSlots(List<LaundrySlot> slots,String bookingDate) throws Exception {
+	private String fetchBookingDate(LocalTime currTime) {
+		String bookingDate=null;
+		DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		if(currTime.compareTo(END_OF_DAY_TIME)>=0 && currTime.compareTo(END_TIME_FOR_TODAY_BOOKING)<=0) {
+			bookingDate=dtf.format(LocalDate.now());
+		}else {
+			bookingDate=dtf.format(LocalDate.now().plusDays(1));
+		}
+		return bookingDate;
+	}
+	
+	private void filterBookedSlots(List<LaundrySlot> slots,String bookingDate,LocalTime currTime) throws Exception {
 		List<LaundryBooking> bookedSlot=laundryBookingRepository.fetchAllBookedSlots(bookingDate);
 		
 		for(Iterator itr=slots.iterator();itr.hasNext();) {
 			LaundrySlot slot=((LaundrySlot)itr.next());
+			LocalTime startTime=LocalTime.parse(slot.getStartTime());
+			if(currTime.compareTo(END_TIME_FOR_TODAY_BOOKING)<=0 && currTime.compareTo(startTime)>=0) {
+				itr.remove();
+				continue;
+			}
 			int count=0;
 			for(LaundryBooking booking:bookedSlot) {
 				if(booking.getSlot().getSlotId()==slot.getSlotId()) {
@@ -45,26 +62,31 @@ public class BookingService {
 		List<LaundrySlot> totalSlot = student.getGender().name().equals(Gender.MALE.name())
 				? laundrySlotRepository.findSlotByHostel(Hostel.BHASKARA)
 				: laundrySlotRepository.findSlotByHostel(Hostel.LILAVATI);
-		//TO-DO need to add filtering logic for the already booked slots
 		LocalTime currTime=LocalTime.now();
-		String bookingDate=null;
-		DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		if(currTime.compareTo(END_OF_DAY_TIME)>=0 && currTime.compareTo(END_TIME_FOR_TODAY_BOOKING)<=0) {
-			bookingDate=dtf.format(LocalDate.now());
-		}else {
-			bookingDate=dtf.format(LocalDate.now().plusDays(1));
-		}
+		String bookingDate=fetchBookingDate(currTime);
 		System.out.println(bookingDate);
-		filterBookedSlots(totalSlot,bookingDate);
+		filterBookedSlots(totalSlot,bookingDate,currTime);
 				
 		StringBuilder slotNames=new StringBuilder();
-		int count=1;
+		if(totalSlot.size()!=0) {
+			slotNames.append(MessageConstants.AVAILABLE_SLOTS_HEAD_MSG).append("*").append(bookingDate).append("*\n\n");
+		}
+		
 		for(LaundrySlot slot:totalSlot) {
 			String startTime=slot.getStartTime();
 			String endTime=slot.getEndTime();
-			slotNames.append(String.valueOf(count++)).append(") ".concat(startTime)).append("-".concat(endTime).concat("\n"));
+			slotNames.append("S").append(String.valueOf(slot.getSlotId())).append(") ".concat(startTime)).append("-".concat(endTime).concat("\n"));
 		}
 		//message when slotNames is Empty
 		return slotNames.toString();
+	}
+	
+	public void bookSlot(int slotNo,long mobileNo) throws Exception {
+		LaundryBooking laundryBooking=new LaundryBooking();
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		laundryBooking.setBookingDate(dateFormatter.parse(fetchBookingDate(LocalTime.now())));
+		laundryBooking.setStudent(studentRepository.findByMobileNumber(mobileNo));
+		laundryBooking.setSlot(laundrySlotRepository.findSlotBySlotNo(slotNo));
+		laundryBookingRepository.saveLaundryBooking(laundryBooking);
 	}
 }
