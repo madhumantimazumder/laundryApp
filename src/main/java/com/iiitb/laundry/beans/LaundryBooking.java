@@ -3,6 +3,8 @@ package com.iiitb.laundry.beans;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +34,10 @@ public class LaundryBooking {
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date bookingDate;
+	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public int getBookingId() {
 		return bookingId;
@@ -63,5 +69,13 @@ public class LaundryBooking {
 
 	public void setBookingDate(Date bookingDate) {
 		this.bookingDate = bookingDate;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 }

@@ -1,11 +1,12 @@
 package com.iiitb.laundry.controller;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
+import com.iiitb.laundry.beans.LaundryBooking;
 import com.iiitb.laundry.service.BookingService;
 import com.iiitb.laundry.service.StudentService;
 import com.iiitb.laundry.utils.DBUtils;
@@ -25,6 +26,7 @@ import com.twilio.twiml.messaging.Message;
 
 @Path("/api")
 public class ChatController {
+	
 	@GET  
 	@Path("/")
     @Produces(MediaType.TEXT_PLAIN)
@@ -47,6 +49,7 @@ public class ChatController {
         String mobileNo=request.get("From").get(0).toString().toLowerCase().substring(12);//ignore whatsapp:+91
         Body body=null;
         String reply=null;
+        BookingService bookingService=null;
         if ("hello".equalsIgnoreCase(receivedMsg))
         {
         	try {
@@ -75,10 +78,15 @@ public class ChatController {
         }
         else if(receivedMsg.startsWith("s"))//slot no for booking will come as s1,s2 etc
         {
+        	bookingService=new BookingService();
         	try {
-				int slotNo=Integer.parseInt(receivedMsg.substring(1));
-				new BookingService().bookSlot(slotNo, Long.parseLong(mobileNo));
-				reply=MessageConstants.ACK_FOR_CONFIRMED_BOOKING_MSG+receivedMsg+"\n\n"+MessageConstants.END_OF_MSG;
+        		if(bookingService.fetchBookedSlot(Long.parseLong(mobileNo))!=null) {
+        			reply=MessageConstants.NACK_FOR_NO_MORE_BOOKING_FOR_TODAY_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+        		}else {
+        			int slotNo=Integer.parseInt(receivedMsg.substring(1));
+    				bookingService.bookSlot(slotNo, Long.parseLong(mobileNo));
+    				reply=MessageConstants.ACK_FOR_CONFIRMED_BOOKING_MSG+receivedMsg+"\n\n"+MessageConstants.END_OF_MSG;
+        		}
 			} catch (NumberFormatException e) {
 				reply=MessageConstants.NACK_FOR_WRONG_BOOKING_INPUT_MSG+"\n\n"+MessageConstants.END_OF_MSG;
 			} catch(Exception e) { //can implement a custom exception if time permits
@@ -88,25 +96,36 @@ public class ChatController {
         }
         else if("cancel".equals(receivedMsg) )
         {
-            body = new Body
-                    .Builder("Your slot booking is cancelled.")
-                    .build();
+        	try {
+        		bookingService=new BookingService();
+        		if(bookingService.fetchBookedSlot(Long.parseLong(mobileNo))==null) throw new Exception();
+				new BookingService().cancelSlot(Long.parseLong(mobileNo));
+				reply=MessageConstants.ACK_FOR_CONFIRMED_CANCELLATION_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+			} catch (Exception e) {
+				reply=MessageConstants.NACK_FOR_CANCELLATION_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+			}
+        	body = new Body.Builder(reply).build();
         }
-        else if("exit".equals(receivedMsg) )
+        else if("view".equalsIgnoreCase(receivedMsg)) 
         {
-            body = new Body
-                    .Builder("Thanks you!\nSay \"hello\" to start again.")
-                    .build();
+        	try {
+        		bookingService=new BookingService();
+				LaundryBooking laundryBooking=bookingService.fetchBookedSlot(Long.parseLong(mobileNo));
+				if(laundryBooking==null) throw new Exception();
+				String slotSchedule=laundryBooking.getSlot().getStartTime()+"-"+laundryBooking.getSlot().getEndTime();
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+				String bookingDate=dateFormatter.format(laundryBooking.getBookingDate());
+				reply=MessageConstants.ACK_FOR_VIEW_MSG+slotSchedule+"("+bookingDate+")"+"\n\n"+MessageConstants.END_OF_MSG;
+			} catch (Exception e) {
+				reply=MessageConstants.NACK_FOR_VIEW_MSG+"\n\n"+MessageConstants.END_OF_MSG;
+			}
+        	body = new Body.Builder(reply).build();
         }
-        else
+        else if("menu".equalsIgnoreCase(receivedMsg))
         {
-            body = new Body
-                    .Builder("Say \"Hello\" to start again.")
-                    .build();
+			reply = MessageConstants.INFO_MSG + "\n" + MessageConstants.MENU_MSG;
+			body = new Body.Builder(reply).build();
         }
-		/*Body body = new Body
-                .Builder(incoming_message)
-                .build();*/
         Message sms = new Message
                 .Builder()
                 .body(body)
