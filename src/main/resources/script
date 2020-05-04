@@ -1,2 +1,8 @@
 insert into Admin values(1,M Mazumder,admin,admin,8334962985);
 Create table Admin (EmpID int NOT NULL PRIMARY KEY, EmpName varchar(255) NOT NULL, Username varchar(255) NOT NULL,Password varchar(255) NOT NULL, Contact varchar(10));
+Insert into LaundryBooking values(1,'2020-05-02','Normal', 4,4);
+
+
+mysql -u root -p
+use IIITB_Laundry;
+

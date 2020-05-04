@@ -17,7 +17,7 @@ public  class BookingDataService {
     StudentRepository studentRepository=new StudentRepository();
     LaundryBookingRepository laundryBookingRepository=new LaundryBookingRepository();
     public String fetchBookingData(String start,String end) throws Exception {
-        List<LaundryBooking> totalBooking=laundryBookingRepository.fetchBookedSlots(start,end);
+        List<LaundryBooking> totalBooking=laundryBookingRepository.fetchAllNormalBookings(start,end);
         for(LaundryBooking lb : totalBooking){
             JSONObject jo = new JSONObject();
             Student student=lb.getStudent();
