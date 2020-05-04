@@ -67,7 +67,7 @@ public class ChatController {
         	String availableSlots;
 			try {
 				availableSlots = new BookingService().fetchAvailableSlot(Long.parseLong(mobileNo));
-				reply = availableSlots.isBlank() ? MessageConstants.NO_SLOTS_AVAILABLE_MSG + MessageConstants.END_OF_MSG
+				reply = availableSlots.trim().isEmpty() ? MessageConstants.NO_SLOTS_AVAILABLE_MSG + MessageConstants.END_OF_MSG
 						: availableSlots + "\n" + MessageConstants.AVAILABLE_SLOTS_TAIL_MSG + "\n\n"
 								+ MessageConstants.END_OF_MSG;
 	            body = new Body.Builder(reply).build();
