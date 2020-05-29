@@ -92,7 +92,7 @@ public class BookingService {
 		LaundryBooking laundryBooking=new LaundryBooking();
 		LaundrySlot laundrySlot=laundrySlotRepository.findSlotBySlotNo(slotNo);
 		LocalTime startTime=LocalTime.parse(laundrySlot.getStartTime());
-		if(LocalTime.now().compareTo(startTime)>=0) throw new Exception();// trying to book a slot from the past
+		if(LocalTime.now().compareTo(END_TIME_FOR_TODAY_BOOKING)<=0 && LocalTime.now().compareTo(startTime)>=0) throw new Exception();// trying to book a slot from the past
 		
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		String bookingDate=fetchBookingDate(LocalTime.now());
