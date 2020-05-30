@@ -8,7 +8,7 @@ import com.iiitb.laundry.repository.AdminDAO;
 import com.iiitb.laundry.beans.Admin;
 
 public class LoginService {
-
+	AdminDAO adminDao=new AdminDAO();
 	public String getAdmin(String data) {
 		JSONObject jObj;
 		Admin admin=new Admin();
@@ -16,7 +16,7 @@ public class LoginService {
 			jObj = (JSONObject)new JSONParser().parse(data);
 			String username = (String) jObj.get("name");
 			String password = (String) jObj.get("password");
-			admin=new AdminDAO().getEmployeeLogin(username, password);
+			admin=adminDao.getEmployeeLogin(username, password);
 
 			if(admin==null) {
 				return null;

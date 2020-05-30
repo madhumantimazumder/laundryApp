@@ -14,6 +14,9 @@ import com.iiitb.laundry.service.LoginService;
 
 @Path("/api/login")
 public class LoginController {
+
+    LoginService limpl=new LoginService();
+
 	@GET  @Path("/")
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
@@ -26,7 +29,6 @@ public class LoginController {
     @Produces(MediaType.TEXT_PLAIN)
     public String addStudentPost(String json) {
         JSONObject jo = new JSONObject();
-        LoginService limpl=new LoginService();
         String username = limpl.getAdmin(json);
         if(username==null) {
         	jo.put("status", 201);

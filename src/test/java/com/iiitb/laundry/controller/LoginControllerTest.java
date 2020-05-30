@@ -8,9 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class LoginControllerTest {
 
@@ -30,9 +32,9 @@ public class LoginControllerTest {
 
     @Test
     public void testForAdminLogin() throws Exception{
-        String expected="M Mazumder";
-        LoginService loginService=new LoginService();
-        String actual= loginService.getAdmin(request);
+        String expected="{\"status\":200,\"username\":\"M Mazumder\"}";
+        when(loginService.getAdmin(Mockito.anyString())).thenReturn("M Mazumder");
+        String actual=loginController.addStudentPost(request);
         assertEquals(expected,actual);
     }
 }

@@ -17,6 +17,9 @@ import java.util.List;
 
 @Path("/api/bookings")
 public class BookingDataController {
+
+    BookingDataService bookingDataService=new BookingDataService();
+
     @GET  @Path("/")
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
@@ -31,7 +34,6 @@ public class BookingDataController {
         JSONObject jObj = (JSONObject)new JSONParser().parse(dateJson);
         String startDate = (String) jObj.get("startDate");
         String endDate = (String) jObj.get("endDate");
-        BookingDataService bookingDataService=new BookingDataService();
         String bookingData= bookingDataService.fetchBookingData(startDate,endDate);
         return bookingData;
     }
