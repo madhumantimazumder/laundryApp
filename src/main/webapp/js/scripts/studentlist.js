@@ -3,7 +3,7 @@ $(document).ready(function() {
 	exportDataToCSV();
 });
 $(function() {
-	var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+	var tomorrow = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1);
 	$('#startDate').datepicker({
 		uiLibrary: 'bootstrap4',
 		iconsLibrary: 'fontawesome',
@@ -14,7 +14,7 @@ $(function() {
 	$('#endDate').datepicker({
 		uiLibrary: 'bootstrap4',
 		iconsLibrary: 'fontawesome',
-		maxDate:today,
+		maxDate:tomorrow,
 		minDate: function () {
 			return $('#startDate').val();
 		}
