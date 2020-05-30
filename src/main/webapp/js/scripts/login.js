@@ -11,7 +11,7 @@ function validateLogin(){
                         'password':password
                         };
            $.ajax({
-                url: "/laundry_webapp/webapi/api/login/validatelogin",
+                url: "/webapi/api/login/validatelogin",
                 method: "POST",
                 dataType: "JSON",
                 contentType: "application/json",
