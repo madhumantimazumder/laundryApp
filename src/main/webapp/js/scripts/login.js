@@ -22,7 +22,7 @@ function validateLogin(){
                 success: function(response) {
                 	if(response.status=="200"){
                 		window.localStorage.setItem('username', response.username);
-                		window.location.href = "/laundry_webapp/studentlist.html";
+                		window.location.href = "/studentlist.html";
                 	}
                 	else{
                 		$('.login-error').show();
