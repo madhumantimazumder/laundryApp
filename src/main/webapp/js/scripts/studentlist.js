@@ -40,7 +40,7 @@ function getBookingList(startDate,endDate){
 		'endDate':endDate
 	};
 	$.ajax({
-		url: "/laundry_webapp/webapi/api/bookings/getdata",
+		url: "/webapi/api/bookings/getdata",
 		method: "POST",
 		dataType: "JSON",
 		contentType: "application/json",
