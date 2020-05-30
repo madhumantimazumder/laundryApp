@@ -65,7 +65,6 @@ public class BookingService {
 				: laundrySlotRepository.findSlotByHostel(Hostel.LILAVATI);
 		LocalTime currTime=LocalTime.now();
 		String bookingDate=fetchBookingDate(currTime);
-		System.out.println(bookingDate);
 		filterBookedSlots(totalSlot,bookingDate,currTime);
 				
 		StringBuilder slotNames=new StringBuilder();
@@ -101,9 +100,6 @@ public class BookingService {
 		laundryBooking.setSlot(laundrySlot);
 		laundryBooking.setStatus(Status.NORMAL);
 		laundryBookingRepository.saveLaundryBooking(laundryBooking);
-		/*StringBuilder str=new StringBuilder();
-		str.append(laundryBooking.getSlot().getStartTime()).append("-").append(laundryBooking.getSlot().getEndTime())
-				.append(",").append(bookingDate);*/
 	}
 	
 	public void cancelSlot(long mobileNo) throws Exception{
