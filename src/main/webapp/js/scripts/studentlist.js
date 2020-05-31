@@ -75,7 +75,7 @@ function exportDataToCSV(){
 		e.preventDefault();
 		$("#data-table").table2excel({
 			name: "Results",
-			filename: "bookinglist.xls"
+			filename: "bookinglist"
 		});
 	});
 }
