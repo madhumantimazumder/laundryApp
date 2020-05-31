@@ -2,6 +2,7 @@ package com.iiitb.laundry.service;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import com.iiitb.laundry.beans.Gender;
 import com.iiitb.laundry.beans.Hostel;
@@ -108,7 +110,6 @@ public class BookingServiceTest {
 	@Mock
 	LaundryBookingRepository laundryBookingRepository;
 	
-	
 	@Before
     public void init() {
         MockitoAnnotations.initMocks(this);
@@ -117,11 +118,12 @@ public class BookingServiceTest {
 	
 	@Test
 	public void testFetchAvailableSlotForBoyWhenMachineAvailableInAllSlot() throws Exception{
+		PowerMockito.doReturn(LocalTime.parse("20:00")).when(spy, "getCurrentServerTime");
 		PowerMockito.doReturn("2020-05-02").when(spy, "fetchBookingDate",Mockito.any());
 		PowerMockito.when(studentRepository.findByMobileNumber(Mockito.anyLong())).thenReturn(maleStudent);
 		PowerMockito.when(laundrySlotRepository.findSlotByHostel(Mockito.any())).thenReturn(boyHostelSlot);
 		PowerMockito.when(laundryBookingRepository.fetchAllBookedSlots(Mockito.anyString())).thenReturn(boyLaundryBooking);
-		String expected="Available Laundry Slots for *2020-05-02*\n\n" + 
+		String expected="Available Laundry Slots for *2020-05-02*\n" +"\n"+ 
 				"S0) 10:00-11:00\n" + 
 				"S1) 11:00-12:00\n" + 
 				"S2) 12:00-13:00\n";
@@ -131,11 +133,12 @@ public class BookingServiceTest {
 	
 	@Test
 	public void testFetchAvailableSlotForGirlWhenMachineNotAvailableInOneSlot() throws Exception{
+		PowerMockito.doReturn(LocalTime.parse("20:00")).when(spy, "getCurrentServerTime");
 		PowerMockito.doReturn("2020-05-02").when(spy, "fetchBookingDate",Mockito.any());
 		PowerMockito.when(studentRepository.findByMobileNumber(Mockito.anyLong())).thenReturn(femaleStudent);
 		PowerMockito.when(laundrySlotRepository.findSlotByHostel(Mockito.any())).thenReturn(girlHostelSlot);
 		PowerMockito.when(laundryBookingRepository.fetchAllBookedSlots(Mockito.anyString())).thenReturn(girlLaundryBooking);
-		String expected="Available Laundry Slots for *2020-05-02*\n\n" + 
+		String expected="Available Laundry Slots for *2020-05-02*\n" +"\n"+ 
 				"S0) 11:00-12:00\n" + 
 				"S1) 12:00-13:00\n"; 
 		String actual=spy.fetchAvailableSlot(Long.valueOf(femaleStudent.getMobileNo()));

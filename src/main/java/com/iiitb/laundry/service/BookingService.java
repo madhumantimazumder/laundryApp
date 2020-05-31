@@ -26,6 +26,10 @@ public class BookingService {
 	private static final LocalTime END_TIME_FOR_TODAY_BOOKING=LocalTime.parse("18:59");
 	private static final LocalTime END_OF_DAY_TIME=LocalTime.parse("00:00");
 	
+	private LocalTime getCurrentServerTime() {
+		return LocalTime.now();
+	}
+	
 	private String fetchBookingDate(LocalTime currTime) {
 		String bookingDate=null;
 		DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -63,7 +67,7 @@ public class BookingService {
 		List<LaundrySlot> totalSlot = student.getGender().name().equals(Gender.MALE.name())
 				? laundrySlotRepository.findSlotByHostel(Hostel.BHASKARA)
 				: laundrySlotRepository.findSlotByHostel(Hostel.LILAVATI);
-		LocalTime currTime=LocalTime.now();
+		LocalTime currTime=getCurrentServerTime();
 		String bookingDate=fetchBookingDate(currTime);
 		filterBookedSlots(totalSlot,bookingDate,currTime);
 				
@@ -82,7 +86,7 @@ public class BookingService {
 	}
 	
 	public LaundryBooking fetchBookedSlot(long mobileNo) throws Exception{
-		String bookingDate=fetchBookingDate(LocalTime.now());
+		String bookingDate=fetchBookingDate(getCurrentServerTime());
 		Student student=studentRepository.findByMobileNumber(mobileNo);
 		return laundryBookingRepository.fetchBookedSlot(student, bookingDate);
 	}
@@ -91,10 +95,11 @@ public class BookingService {
 		LaundryBooking laundryBooking=new LaundryBooking();
 		LaundrySlot laundrySlot=laundrySlotRepository.findSlotBySlotNo(slotNo);
 		LocalTime startTime=LocalTime.parse(laundrySlot.getStartTime());
-		if(LocalTime.now().compareTo(END_TIME_FOR_TODAY_BOOKING)<=0 && LocalTime.now().compareTo(startTime)>=0) throw new Exception();// trying to book a slot from the past
+		LocalTime currTime=getCurrentServerTime();
+		if(currTime.compareTo(END_TIME_FOR_TODAY_BOOKING)<=0 && currTime.compareTo(startTime)>=0) throw new Exception();// trying to book a slot from the past
 		
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-		String bookingDate=fetchBookingDate(LocalTime.now());
+		String bookingDate=fetchBookingDate(currTime);
 		laundryBooking.setBookingDate(dateFormatter.parse(bookingDate));
 		laundryBooking.setStudent(studentRepository.findByMobileNumber(mobileNo));
 		laundryBooking.setSlot(laundrySlot);
@@ -103,7 +108,7 @@ public class BookingService {
 	}
 	
 	public void cancelSlot(long mobileNo) throws Exception{
-		String bookingDate=fetchBookingDate(LocalTime.now());
+		String bookingDate=fetchBookingDate(getCurrentServerTime());
 		Student student=studentRepository.findByMobileNumber(mobileNo);
 		laundryBookingRepository.cancelLaundryBooking(bookingDate, student);
 	}
