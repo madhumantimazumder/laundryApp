@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	if(window.localStorage.getItem(username)=="undefined")
+	if(window.localStorage.getItem('username')==null || window.localStorage.getItem('username')=="undefined")
 		window.location.href = "/";
 	window.localStorage.removeItem('username');
 	getData();
