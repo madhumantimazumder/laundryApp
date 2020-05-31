@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	if(window.localStorage.getItem(username)=="undefined")
+		window.location.href = "/";
+	window.localStorage.removeItem('username');
 	getData();
 	exportDataToCSV();
 });
